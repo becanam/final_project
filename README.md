@@ -1,6 +1,10 @@
-# midterm_project
+# final_project
 
-A new Flutter project.
+응용모바일프로그래밍 기말 프로젝트
+
+이제하
+이정형
+남레베까
 
 ## Getting Started
 
