@@ -4,12 +4,13 @@
     {
       "id": 1,
       "name": "Wonderful Trip to Chennai",
-      "country": "Inida",
+      "country": "India",
       "city": "Chennai",
-      "startDate": "December 21st, 2023",
-      "endDate": "January 3rd, 2024",
+      "startDate": "2023-12-21",
+      "endDate": "2024-01-05",
       "price": 2405,
-      "theme": "사원 탐방"
+      "theme": "사원 탐방",
+      "imageUrl": "https://as1.ftcdn.net/v2/jpg/03/64/04/28/1000_F_364042891_wuUCzHVYxC65IlkwxluH9acHazI1K4N6.jpg"
     },
     {
       "name": "Trip to Idaho",
@@ -19,7 +20,7 @@
       "endDate": "2024-02-27",
       "price": 1500,
       "theme": "Romance",
-      "imageUrl":"https://as1.ftcdn.net/v2/jpg/03/64/04/28/1000_F_364042891_wuUCzHVYxC65IlkwxluH9acHazI1K4N6.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Payette%2C_Idaho.jpg",
       "id": 2
     }
   ]
