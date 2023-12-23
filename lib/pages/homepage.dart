@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:midterm_project/utilities/tab_bar.dart';
 import 'package:midterm_project/utilities/travel_options.dart';
+import 'package:midterm_project/utilities/login.dart';
+
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -47,12 +49,27 @@ class _HomePageState extends State<Homepage> {
                 ),
 
                 //profile
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: LoginScreen(), // Assuming LoginScreen is a widget that fits in a dialog
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child:
                 CircleAvatar(
                   backgroundColor: Colors.grey[300],
                   radius: 25,
                   child: Image.asset('lib/icons/user.png',
                       height: horizontalPadding, color: Colors.grey[800]),
-                )
+                ))
               ],
             ),
           ),
