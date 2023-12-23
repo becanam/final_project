@@ -1,5 +1,15 @@
 {
   "users": [
 
+  ],
+  "travel_plans":[
+    {"name": "Wonderful Trip to Chennai", 
+    "country": "Inida", 
+    "city": "Chennai", 
+    "startDate": "December 21st, 2023", 
+    "endDate": "January 3rd, 2024", 
+    "price": 2405, 
+    "theme": "사원 탐방"
+    }
   ]
 }
