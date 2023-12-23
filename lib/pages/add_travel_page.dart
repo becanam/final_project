@@ -17,6 +17,8 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _themeController = TextEditingController();
+  final TextEditingController _imageUrlController = TextEditingController();
+
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
@@ -59,6 +61,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
         'endDate': _endDateController.text,
         'price': int.tryParse(_priceController.text),
         'theme': _themeController.text,
+        'imageUrl': _imageUrlController.text, // Add this line
       }),
     );
 
@@ -74,6 +77,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
       _endDateController.clear();
       _priceController.clear();
       _themeController.clear();
+      _imageUrlController.clear(); // Add this line
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Failed to add travel plan")),
@@ -90,6 +94,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
     _endDateController.dispose();
     _priceController.dispose();
     _themeController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -149,6 +154,12 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
               controller: _themeController,
               decoration: InputDecoration(
                 labelText: '테마 (Theme)',
+              ),
+            ),
+            TextFormField(
+              controller: _imageUrlController,
+              decoration: InputDecoration(
+                labelText: '국가 이미지파일 주소 (Image URL)',
               ),
             ),
             SizedBox(height: 20),

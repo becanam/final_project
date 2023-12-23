@@ -58,7 +58,6 @@ class _HomepageState extends ConsumerState<Homepage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top section with user avatar and app icon
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
                 child: Row(
@@ -88,7 +87,6 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ],
                 ),
               ),
-              // "Best Places For Travel" section
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
                 child: Container(
@@ -103,12 +101,10 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ),
                 ),
               ),
-              // Category tabs
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Center(child: CategoryTabs()),
               ),
-              // "Travel Plan" section with "Add Plan" button
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
                 child: Row(
@@ -125,7 +121,6 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ],
                 ),
               ),
-              // Dynamic travel plans section
               FutureBuilder<List<dynamic>>(
                 future: fetchTravelPlans(),
                 builder: (context, snapshot) {
@@ -141,47 +136,76 @@ class _HomepageState extends ConsumerState<Homepage> {
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data!.length, // Dynamically set the itemCount
+                    itemCount: snapshot.data!.length,
                     padding: const EdgeInsets.all(16),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.65,
+                      childAspectRatio: 1 / 1, // Adjusted childAspectRatio
                     ),
                     itemBuilder: (context, index) {
                       var plan = snapshot.data![index];
                       return Card(
                         clipBehavior: Clip.antiAlias,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to fill the width
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             Image.network(
-                              plan['imageUrl'] ?? 'default_image_url', // Replace with default image URL if null
-                              height: 150.0,
-                              fit: BoxFit.cover, // Cover the card width
+                              plan['imageUrl'] ?? 'assets/default_image.png',
+                              height: 250.0,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/default_image.png',
+                                  height: 250.0,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center, // Center children vertically
-                                  children: <Widget>[
-                                    Text(
-                                      plan['name'] ?? 'Unknown Name',
-                                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center, // Center text horizontally
+                            SizedBox(height: 10), // Adjusted gap
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    plan['name'] ?? 'Unknown Name',
+                                    style: TextStyle(
+                                      fontSize: 24, // Increased font size
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    SizedBox(height: 2),  // Space between title and details
-                                    ...[
-                                      "국가: ${plan['country'] ?? 'Unknown'}",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Text(
+                                    "국가: ${plan['country'] ?? 'Unknown'}",
+                                    style: TextStyle(fontSize: 18), // Increased font size
+                                    textAlign: TextAlign.center,
+                                  ),
+                                    Text(
                                       "도시: ${plan['city'] ?? 'Unknown'}",
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
                                       "시작일: ${plan['startDate'] ?? 'Unknown'}",
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
                                       "종료일: ${plan['endDate'] ?? 'Unknown'}",
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
                                       "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
                                       "테마: ${plan['theme'] ?? 'Unknown'}",
-                                    ].map((detail) => Text(detail, textAlign: TextAlign.center))
-                                      .toList(),
-                                  ],
-                                ),
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                       ],
                               ),
                             ),
                           ],
