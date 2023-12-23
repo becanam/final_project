@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:midterm_project/providers/user_provider.dart';
+import 'package:midterm_project/utilities/login.dart';
 import 'package:midterm_project/utilities/tab_bar.dart';
-import 'package:midterm_project/utilities/travel_options.dart';
+import 'package:midterm_project/pages/add_travel_page.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class Homepage extends ConsumerStatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
 
   @override
-  State<Homepage> createState() => _HomePageState();
+  _HomepageState createState() => _HomepageState();
 }
 
 class _HomePageState extends State<Homepage> {
@@ -44,6 +49,10 @@ class _HomePageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final username = ref.watch(userProvider.state).state;
+    final double horizontalPadding = 30.0;
+    final double verticalPadding = 20.0;
+
     return Scaffold(
         body: SafeArea(
       child: Column(
