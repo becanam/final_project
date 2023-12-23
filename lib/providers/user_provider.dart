@@ -1,3 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userProvider = StateProvider<String?>((ref) => null);
+// Define a StateProvider for managing the username
+final userProvider = StateProvider<String?>((ref) {
+  // Initial value is null, indicating no user is logged in
+  return null;
+});

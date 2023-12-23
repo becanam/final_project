@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:midterm_project/providers/user_provider.dart';
 
-final userProvider = StateProvider<String?>((ref) => null);
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
+
+  Future<void> _login() async {
+  final String username = _usernameController.text;
+  if (username.isNotEmpty) {
+    var url = Uri.parse('http://localhost:3000/users');
+    try {
+      var response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({'username': username}),
+      );
+
+      if (response.statusCode == 201) {
+        // User added successfully
+        ref.read(userProvider.state).state = username;
+        Navigator.pop(context);
+      } else {
+        // Handle other status codes if needed
+        print('Failed to add user: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  void _login() {
-    final String username = _usernameController.text;
-    // Implement your login logic here
-    // For now, we'll just print the username
-    print('User logged in: $username');
-    Navigator.pop(context);
   }
 
   @override
