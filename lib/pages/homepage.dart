@@ -112,11 +112,11 @@ class _HomepageState extends ConsumerState<Homepage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Trending Now",
+                    "Travel Plan",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Text(
-                    "See all",
+                    "Add Plan",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blue),
                   ),
                 ],
