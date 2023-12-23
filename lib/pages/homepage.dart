@@ -14,45 +14,36 @@ class Homepage extends ConsumerStatefulWidget {
   _HomepageState createState() => _HomepageState();
 }
 
-class _HomePageState extends State<Homepage> {
-  //padding constants
-  final double horizontalPadding = 30;
-  final double verticalPadding = 20;
+class _HomepageState extends ConsumerState<Homepage> {
+  Future<void> fetchUserData() async {
+    var url = Uri.parse('http://localhost:3000/users');
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var users = json.decode(response.body) as List;
+        if (users.isNotEmpty) {
+          var currentUser = users.last['username'];
+          ref.read(userProvider.state).state = currentUser;
+        } else {
+          ref.read(userProvider.state).state = null;
+        }
+      } else {
+        print('Failed to fetch users: ${response.statusCode}, ${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred while fetching users: $e');
+    }
+  }
 
-// list of places
-  List travelPlaces = [
-    [
-      "Chennai, India",
-      "lib/icons/flag.png",
-      "⭐️ 4.2 Rating",
-      "lib/icons/chennai.jpg"
-    ],
-    [
-      "Sapporo, Japan",
-      "lib/icons/japan.png",
-      "⭐️ 4.5 Rating",
-      "lib/icons/sapporo.jpg"
-    ],
-    [
-      "Barcelona, Spain",
-      "lib/icons/spain.png",
-      "⭐️ 4.8 Rating",
-      "lib/icons/barcelona.jpg"
-    ],
-    [
-      "Rio de Janeiro, Brazil",
-      "lib/icons/brazil.png",
-      "⭐️ 4.1 Rating",
-      "lib/icons/rio_de_janeiro.jpg"
-    ]
-  ];
-
-  void _navigateToDetailPage(BuildContext context, String countryName) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetailPage(countryName: countryName),
-      ),
-    );
+  Future<List<dynamic>> fetchTravelPlans() async {
+    var url = Uri.parse('http://localhost:3000/travel_plans');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      print('Failed to fetch travel plans: ${response.statusCode}, ${response.body}');
+      return [];
+    }
   }
 
   @override
@@ -101,8 +92,7 @@ class _HomePageState extends State<Homepage> {
                 child: Container(
                   width: 250,
                   height: 125,
-                  color: Colors.black.withOpacity(0),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Best Places For Travel", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
@@ -231,98 +221,38 @@ class _HomePageState extends State<Homepage> {
       ),
     );
   }
-}
 
-// DetailPage 클래스 정의
-
-class DetailPage extends StatefulWidget {
-  final String countryName;
-
-  const DetailPage({required this.countryName});
-
-  @override
-  _DetailPageState createState() => _DetailPageState();
-}
-
-class _DetailPageState extends State<DetailPage> {
-  double iconSize = 48.0;
-  bool isMaxSizeReached = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.countryName),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            // "더이상 누를 수 없습니다!" 문구
-            Visibility(
-              visible: isMaxSizeReached,
-              child: SizedBox(
-                height: 30.0,
-                child: Center(
-                  child: Text(
-                    "더이상 누를 수 없습니다!",
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              ),
-            ),
-            // 좋아요 아이콘
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Image.asset(
-                'lib/icons/heart.png',
-                height: iconSize,
-                width: iconSize,
-              ),
-            ),
-            SizedBox(height: 16.0),
-
-            // "+" 버튼
-            ElevatedButton(
+  void _showLogoutDialog(BuildContext context, String username) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logged in as $username'),
+          content: Text('Do you want to log out?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Logout'),
               onPressed: () {
-                if (iconSize + 10.0 <= 530.0) {
-                  setState(() {
-                    iconSize += 10.0;
-                    isMaxSizeReached = false;
-                  });
-                } else {
-                  setState(() {
-                    isMaxSizeReached = true;
-                  });
-
-                  Future.delayed(Duration(seconds: 1), () {
-                    setState(() {
-                      isMaxSizeReached = false;
-                    });
-                  });
-                }
+                ref.read(userProvider.state).state = null;
+                Navigator.of(context).pop();
               },
-              child: Text("+"),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(50, 50),
-              ),
             ),
-            SizedBox(height: 16.0),
-
-            // "-" 버튼
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  iconSize -= 10.0;
-                });
-              },
-              child: Text("-"),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(50, 50),
-              ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ],
-        ),
+        );
+      },
+    );
+  }
+
+  void _showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+        child: LoginScreen(),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       ),
     );
   }
