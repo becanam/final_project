@@ -14,7 +14,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
   String city = '';
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
-  double price = 0.0;
+  int price = 0;
   String theme = '';
 
   Future<void> submitTravelPlan() async {
