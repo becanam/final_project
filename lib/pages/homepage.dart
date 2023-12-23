@@ -7,6 +7,71 @@ import 'package:midterm_project/utilities/login.dart';
 import 'package:midterm_project/utilities/tab_bar.dart';
 import 'package:midterm_project/pages/add_travel_page.dart';
 
+class ExplodingThumbsUp extends StatefulWidget {
+  @override
+  _ExplodingThumbsUpState createState() => _ExplodingThumbsUpState();
+}
+
+class _ExplodingThumbsUpState extends State<ExplodingThumbsUp> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(_controller);
+    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
+    _colorAnimation = ColorTween(begin: Colors.grey, end: Colors.green).animate(_controller);
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleOnPressed() {
+    if (_controller.status == AnimationStatus.dismissed) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 30,
+      icon: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _fadeAnimation.value,
+            child: Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Icon(Icons.thumb_up, color: _colorAnimation.value),
+            ),
+          );
+        },
+      ),
+      onPressed: _handleOnPressed,
+    );
+  }
+}
+
+
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -121,100 +186,135 @@ class _HomepageState extends ConsumerState<Homepage> {
                   ],
                 ),
               ),
-              FutureBuilder<List<dynamic>>(
-                future: fetchTravelPlans(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.0),
-                      child: Center(child: Text("No travel plans available.")),
-                    );
-                  }
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data!.length,
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1, // Adjusted childAspectRatio
-                    ),
-                    itemBuilder: (context, index) {
-                      var plan = snapshot.data![index];
-                      return Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Image.network(
-                              plan['imageUrl'] ?? 'assets/default_image.png',
-                              height: 250.0,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/default_image.png',
-                                  height: 250.0,
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
-                            SizedBox(height: 10), // Adjusted gap
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    plan['name'] ?? 'Unknown Name',
-                                    style: TextStyle(
-                                      fontSize: 24, // Increased font size
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "국가: ${plan['country'] ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 18), // Increased font size
-                                    textAlign: TextAlign.center,
-                                  ),
-                                    Text(
-                                      "도시: ${plan['city'] ?? 'Unknown'}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "시작일: ${plan['startDate'] ?? 'Unknown'}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "종료일: ${plan['endDate'] ?? 'Unknown'}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      "테마: ${plan['theme'] ?? 'Unknown'}",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                       ],
-                              ),
-                            ),
-                          ],
-                        ),
+              
+        FutureBuilder<List<dynamic>>(
+          future: fetchTravelPlans(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                child: Center(child: Text("No travel plans available.")),
+              );
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: snapshot.data!.length,
+              padding: const EdgeInsets.all(16),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1.2,      //takes care of card size
+              ),
+      itemBuilder: (context, index) {
+        var plan = snapshot.data![index];
+
+
+        return Card(
+  clipBehavior: Clip.antiAlias,
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: <Widget>[
+      Image.network(
+        plan['imageUrl'] ?? 'assets/default_image.png',
+        height: 250.0,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/default_image.png',
+            height: 250.0,
+            fit: BoxFit.cover,
+          );
+        },
+      ),
+      SizedBox(height: 10),
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              plan['name'] ?? 'Unknown Name',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "국가: ${plan['country'] ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "도시: ${plan['city'] ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "시작일: ${plan['startDate'] ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "종료일: ${plan['endDate'] ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              "테마: ${plan['theme'] ?? 'Unknown'}",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    // Confirmation dialog and deletion logic
+                    // ... existing code for delete button
+                  },
+                  child: Text('Delete', style: TextStyle(color: Colors.black)),
+                  style: ElevatedButton.styleFrom(primary: Colors.red),
+                ),
+                IconButton(
+                icon: Icon(Icons.thumb_up),
+                color: Colors.grey, // Default color
+                onPressed: () {
+                  // Trigger the exploding animation
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: ExplodingThumbsUp(),
                       );
                     },
                   );
                 },
               ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);
+
+      },
+    );
+  },
+),
+
             ],
           ),
         ),
