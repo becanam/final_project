@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 
 class AddTravelPlanPage extends StatefulWidget {
   @override
@@ -8,56 +10,87 @@ class AddTravelPlanPage extends StatefulWidget {
 }
 
 class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
-  final _formKey = GlobalKey<FormState>();
-  String name = '';
-  String country = '';
-  String city = '';
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
-  int price = 0;
-  String theme = '';
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _themeController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
 
   Future<void> submitTravelPlan() async {
-    var url = Uri.parse('http://localhost:3000/travel_plans'); // Adjust URL as needed
+    // Check if all the information is entered
+    if (_nameController.text.isEmpty ||
+        _countryController.text.isEmpty ||
+        _cityController.text.isEmpty ||
+        _startDateController.text.isEmpty ||
+        _endDateController.text.isEmpty ||
+        _priceController.text.isEmpty ||
+        _themeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please fill up all the informations")),
+      );
+      return;
+    }
+    
+    var url = Uri.parse('http://localhost:3000/travel_plans');
     var response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
       body: json.encode({
-        'name': name,
-        'country': country,
-        'city': city,
-        'startDate': startDate.toIso8601String(),
-        'endDate': endDate.toIso8601String(),
-        'price': price,
-        'theme': theme,
+        'name': _nameController.text,
+        'country': _countryController.text,
+        'city': _cityController.text,
+        'startDate': _startDateController.text,
+        'endDate': _endDateController.text,
+        'price': int.tryParse(_priceController.text),
+        'theme': _themeController.text,
       }),
     );
 
     if (response.statusCode == 201) {
-      // Handle successful submission
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Travel plan added successfully")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Travel plan added successfully")),
+      );
+      // Clear the text fields
+      _nameController.clear();
+      _countryController.clear();
+      _cityController.clear();
+      _startDateController.clear();
+      _endDateController.clear();
+      _priceController.clear();
+      _themeController.clear();
     } else {
-      // Handle error
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please fill up all the informations")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to add travel plan")),
+      );
     }
   }
 
-  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: isStartDate ? startDate : endDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != (isStartDate ? startDate : endDate)) {
-      setState(() {
-        if (isStartDate) {
-          startDate = picked;
-        } else {
-          endDate = picked;
-        }
-      });
-    }
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _countryController.dispose();
+    _cityController.dispose();
+    _startDateController.dispose();
+    _endDateController.dispose();
+    _priceController.dispose();
+    _themeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,50 +99,66 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
       appBar: AppBar(
         title: Text('Add Travel Plan'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: '이름 (Name)'),
-                onChanged: (value) => name = value,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: '이름 (Name)',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: '국가 (Country)'),
-                onChanged: (value) => country = value,
+            ),
+            TextFormField(
+              controller: _countryController,
+              decoration: InputDecoration(
+                labelText: '국가 (Country)',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: '도시 (City)'),
-                onChanged: (value) => city = value,
+            ),
+            TextFormField(
+              controller: _cityController,
+              decoration: InputDecoration(
+                labelText: '도시 (City)',
               ),
-              ListTile(
-                title: Text("시작일 (Start Date): ${startDate.toLocal()}".split(' ')[0]),
-                trailing: Icon(Icons.calendar_today),
-                onTap: () => _selectDate(context, true),
+            ),
+            TextFormField(
+              controller: _startDateController,
+              decoration: InputDecoration(
+                labelText: '시작일 (Start Date)',
               ),
-              ListTile(
-                title: Text("종료일 (End Date): ${endDate.toLocal()}".split(' ')[0]),
-                trailing: Icon(Icons.calendar_today),
-                onTap: () => _selectDate(context, false),
+              onTap: () => _selectDate(context, _startDateController),
+              readOnly: true,  // Prevent manual editing
+            ),
+            TextFormField(
+              controller: _endDateController,
+              decoration: InputDecoration(
+                labelText: '종료일 (End Date)',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: '가격 (Price)'),
-                keyboardType: TextInputType.number,
-                onChanged: (value) => price = double.tryParse(value) ?? 0.0,
+              onTap: () => _selectDate(context, _endDateController),
+              readOnly: true,  // Prevent manual editing
+            ),
+            TextFormField(
+              controller: _priceController,
+              decoration: InputDecoration(
+                labelText: '가격 (Price)',
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: '테마 (Theme)'),
-                onChanged: (value) => theme = value,
+              keyboardType: TextInputType.number,
+            ),
+            TextFormField(
+              controller: _themeController,
+              decoration: InputDecoration(
+                labelText: '테마 (Theme)',
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
                 onPressed: submitTravelPlan,
                 child: Text('Submit'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -150,28 +150,44 @@ class _HomepageState extends ConsumerState<Homepage> {
                     itemBuilder: (context, index) {
                       var plan = snapshot.data![index];
                       return Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                plan['이름'] ?? 'Unknown Name',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        clipBehavior: Clip.antiAlias,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch to fill the width
+                          children: <Widget>[
+                            Image.network(
+                              plan['imageUrl'] ?? 'default_image_url', // Replace with default image URL if null
+                              height: 150.0,
+                              fit: BoxFit.cover, // Cover the card width
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center, // Center children vertically
+                                  children: <Widget>[
+                                    Text(
+                                      plan['name'] ?? 'Unknown Name',
+                                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center, // Center text horizontally
+                                    ),
+                                    SizedBox(height: 2),  // Space between title and details
+                                    ...[
+                                      "국가: ${plan['country'] ?? 'Unknown'}",
+                                      "도시: ${plan['city'] ?? 'Unknown'}",
+                                      "시작일: ${plan['startDate'] ?? 'Unknown'}",
+                                      "종료일: ${plan['endDate'] ?? 'Unknown'}",
+                                      "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
+                                      "테마: ${plan['theme'] ?? 'Unknown'}",
+                                    ].map((detail) => Text(detail, textAlign: TextAlign.center))
+                                      .toList(),
+                                  ],
+                                ),
                               ),
-                              SizedBox(height: 8),  // Space between title and details
-                              Text("국가: ${plan['country'] ?? 'Unknown'}"),
-                              Text("도시: ${plan['city'] ?? 'Unknown'}"),
-                              Text("시작일: ${plan['startDate'] ?? 'Unknown'}"),
-                              Text("종료일: ${plan['endDate'] ?? 'Unknown'}"),
-                              Text("가격(usd): ${plan['price']?.toString() ?? 'Unknown'}"),
-                              Text("테마: ${plan['theme'] ?? 'Unknown'}"),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     },
-
                   );
                 },
               ),
