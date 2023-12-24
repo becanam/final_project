@@ -5,7 +5,7 @@ List<Counter> counterProviderList = [
   Counter(),
   Counter(),
   Counter(),
-  Counter()
+  Counter(),
 ];
 
 class TravelCard {
@@ -16,6 +16,7 @@ class TravelCard {
   IconData icon;
   Color iconColor;
   Counter counter;
+  String description; // New field for longer description
 
   TravelCard({
     required this.cityName,
@@ -24,7 +25,8 @@ class TravelCard {
     required this.cityImage,
     required this.icon,
     required this.iconColor,
-    required this.counter
+    required this.counter,
+    required this.description, // New parameter
   });
 }
 
@@ -36,7 +38,10 @@ List<TravelCard> travelOptionsList = [
     cityImage: "lib/icons/chennai.jpg",
     icon: Icons.favorite,
     iconColor: Colors.red,
-    counter: counterProviderList[0]
+    counter: counterProviderList[0],
+    description: "Explore the vibrant culture and rich history of Chennai. "
+        "Visit historic temples, bustling markets, and enjoy the local cuisine. "
+        "Chennai offers a unique blend of tradition and modernity.",
   ),
   TravelCard(
     cityName: "Sapporo, Japan",
@@ -45,7 +50,11 @@ List<TravelCard> travelOptionsList = [
     cityImage: "lib/icons/sapporo.jpg",
     icon: Icons.favorite,
     iconColor: Colors.red,
-    counter: counterProviderList[1]
+    counter: counterProviderList[1],
+    description: "Experience the beauty of Sapporo in every season. "
+        "From cherry blossoms in spring to winter snow festivals, Sapporo "
+        "offers stunning landscapes and a warm welcome. Discover the local "
+        "culture and try delicious Hokkaido cuisine.",
   ),
   TravelCard(
     cityName: "Barcelona, Spain",
@@ -54,7 +63,11 @@ List<TravelCard> travelOptionsList = [
     cityImage: "lib/icons/barcelona.jpg",
     icon: Icons.favorite,
     iconColor: Colors.red,
-    counter: counterProviderList[2]
+    counter: counterProviderList[2],
+    description: "Explore the vibrant and artistic city of Barcelona. "
+        "Visit iconic landmarks like Sagrada Familia and Park Güell. "
+        "Indulge in delicious tapas and immerse yourself in the lively atmosphere "
+        "of this Mediterranean gem.",
   ),
   TravelCard(
     cityName: "Rio de Janeiro, Brazil",
@@ -63,6 +76,10 @@ List<TravelCard> travelOptionsList = [
     cityImage: "lib/icons/rio_de_janeiro.jpg",
     icon: Icons.favorite,
     iconColor: Colors.red,
-    counter: counterProviderList[3]
+    counter: counterProviderList[3],
+    description: "Experience the energetic vibes of Rio de Janeiro. "
+        "Relax on the famous Copacabana Beach, explore the iconic Christ the Redeemer, "
+        "and immerse yourself in the rhythm of samba. Rio de Janeiro is a lively "
+        "destination with breathtaking landscapes.",
   ),
 ];
