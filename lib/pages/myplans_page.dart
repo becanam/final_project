@@ -71,7 +71,7 @@ class MyPlansScreen extends ConsumerWidget {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.5, // takes care of card size
+                      childAspectRatio: 1 / 1, // takes care of card size
                     ),
                     itemBuilder: (context, index) {
                       var plan = snapshot.data![index];
