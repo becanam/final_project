@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:midterm_project/utilities/heart_animation.dart';
+import 'package:midterm_project/utilities/myplans_detail.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
