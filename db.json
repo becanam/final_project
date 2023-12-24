@@ -15,7 +15,10 @@
       "endDate": "2024-01-05",
       "price": 2405,
       "theme": "사원 탐방",
-      "imageUrl": "https://as1.ftcdn.net/v2/jpg/03/64/04/28/1000_F_364042891_wuUCzHVYxC65IlkwxluH9acHazI1K4N6.jpg"
+      "imageUrl": "https://as1.ftcdn.net/v2/jpg/03/64/04/28/1000_F_364042891_wuUCzHVYxC65IlkwxluH9acHazI1K4N6.jpg",
+      "likes": 0,
+      "recommendations": 0
+      
     },
     {
       "name": "Trip to Idaho",
@@ -26,6 +29,8 @@
       "price": 1500,
       "theme": "Romance",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Payette%2C_Idaho.jpg",
+      "likes": 0,
+      "recommendations": 0,
       "id": 2
     },
     {
@@ -48,7 +53,22 @@
       "price": null,
       "theme": "fddf",
       "imageUrl": "https://cdn.pixabay.com/photo/2015/07/17/22/43/student-849825_1280.jpg",
+      "likes": 0,
+      "recommendations": 0,
       "id": 4
+    },
+    {
+      "name": "please",
+      "country": "korea",
+      "city": "seoul",
+      "startDate": "2023-12-25",
+      "endDate": "2023-12-26",
+      "price": 20,
+      "theme": "academic",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/Statsbiblioteket_l%C3%A6sesalen-2.jpg",
+      "likes": 0,
+      "recommendations": 0,
+      "id": 5
     }
   ]
 }
