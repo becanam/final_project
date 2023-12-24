@@ -160,7 +160,7 @@ Future<void> incrementLikes(Map<String, dynamic> plan) async {
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
               child: Container(
                 width: 250,
-                height: 95,
+                height: 115,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
