@@ -36,7 +36,7 @@ class _AddPlanPage extends State<AddPlanPage> {
     }
   }
 
- Future<void> submitTravelPlan() async {
+  Future<void> submitTravelPlan() async {
     // Check if all the information is entered
     if (_nameController.text.isEmpty ||
         _countryController.text.isEmpty ||
@@ -64,8 +64,6 @@ class _AddPlanPage extends State<AddPlanPage> {
         'price': int.tryParse(_priceController.text),
         'theme': _themeController.text,
         'imageUrl': _imageUrlController.text, // Add this line
-        'likes': 0, // Add likes with a default value of 0
-        'recommendations': 0, // Add recommendations with a default value of 0
       }),
     );
 
@@ -87,8 +85,7 @@ class _AddPlanPage extends State<AddPlanPage> {
         const SnackBar(content: Text("Failed to add travel plan")),
       );
     }
-}
-
+  }
 
   @override
   void dispose() {

@@ -109,11 +109,6 @@ class DetailWidget extends ConsumerWidget {
                           Text(likes)
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(travelCard.description,
-                      style: TextStyle(fontSize: 16),),
                     )
                   ],
                 ),
