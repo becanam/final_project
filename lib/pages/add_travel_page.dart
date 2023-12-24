@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class AddTravelPlanPage extends StatefulWidget {
   @override
   _AddTravelPlanPageState createState() => _AddTravelPlanPageState();
@@ -19,8 +18,8 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
   final TextEditingController _themeController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
 
-
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -48,7 +47,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
       );
       return;
     }
-    
+
     var url = Uri.parse('http://localhost:3000/travel_plans');
     var response = await http.post(
       url,
@@ -133,7 +132,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
                 labelText: '시작일 (Start Date)',
               ),
               onTap: () => _selectDate(context, _startDateController),
-              readOnly: true,  // Prevent manual editing
+              readOnly: true, // Prevent manual editing
             ),
             TextFormField(
               controller: _endDateController,
@@ -141,7 +140,7 @@ class _AddTravelPlanPageState extends State<AddTravelPlanPage> {
                 labelText: '종료일 (End Date)',
               ),
               onTap: () => _selectDate(context, _endDateController),
-              readOnly: true,  // Prevent manual editing
+              readOnly: true, // Prevent manual editing
             ),
             TextFormField(
               controller: _priceController,

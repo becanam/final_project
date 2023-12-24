@@ -1,5 +1,10 @@
 {
-  "users": [],
+  "users": [
+    {
+      "username": "jeha",
+      "id": 1
+    }
+  ],
   "travel_plans": [
     {
       "id": 1,
@@ -22,6 +27,17 @@
       "theme": "Romance",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Payette%2C_Idaho.jpg",
       "id": 2
+    },
+    {
+      "name": "jh",
+      "country": "korea",
+      "city": "soul",
+      "startDate": "2023-12-01",
+      "endDate": "2023-12-29",
+      "price": 9000000,
+      "theme": "happy",
+      "imageUrl": "https://cdn.pixabay.com/photo/2019/04/11/13/38/city-4119806_1280.jpg",
+      "id": 3
     }
   ]
 }
