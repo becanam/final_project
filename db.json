@@ -16,9 +16,8 @@
       "price": 2405,
       "theme": "사원 탐방",
       "imageUrl": "https://as1.ftcdn.net/v2/jpg/03/64/04/28/1000_F_364042891_wuUCzHVYxC65IlkwxluH9acHazI1K4N6.jpg",
-      "likes": 0,
-      "recommendations": 0
-      
+      "likes": 25,
+      "recommendations": 36
     },
     {
       "name": "Trip to Idaho",
@@ -29,8 +28,8 @@
       "price": 1500,
       "theme": "Romance",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Payette%2C_Idaho.jpg",
-      "likes": 0,
-      "recommendations": 0,
+      "likes": 105,
+      "recommendations": 27,
       "id": 2
     },
     {
@@ -42,7 +41,8 @@
       "price": 9000000,
       "theme": "happy",
       "imageUrl": "https://cdn.pixabay.com/photo/2019/04/11/13/38/city-4119806_1280.jpg",
-      "id": 3
+      "id": 3,
+      "recommendations": 1
     },
     {
       "name": "adf",
@@ -53,7 +53,7 @@
       "price": null,
       "theme": "fddf",
       "imageUrl": "https://cdn.pixabay.com/photo/2015/07/17/22/43/student-849825_1280.jpg",
-      "likes": 0,
+      "likes": 1,
       "recommendations": 0,
       "id": 4
     },
@@ -67,7 +67,7 @@
       "theme": "academic",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/Statsbiblioteket_l%C3%A6sesalen-2.jpg",
       "likes": 0,
-      "recommendations": 0,
+      "recommendations": 2,
       "id": 5
     }
   ]
