@@ -5,7 +5,7 @@ List<Counter> counterProviderList = [
   Counter(),
   Counter(),
   Counter(),
-  Counter(),
+  Counter()
 ];
 
 class TravelCard {
@@ -16,7 +16,7 @@ class TravelCard {
   IconData icon;
   Color iconColor;
   Counter counter;
-  String description; // New field for longer description
+  String description; 
 
   TravelCard({
     required this.cityName,
@@ -26,9 +26,10 @@ class TravelCard {
     required this.icon,
     required this.iconColor,
     required this.counter,
-    required this.description, // New parameter
+    required this.description,
   });
 }
+
 
 List<TravelCard> travelOptionsList = [
   TravelCard(
@@ -39,9 +40,10 @@ List<TravelCard> travelOptionsList = [
     icon: Icons.favorite,
     iconColor: Colors.red,
     counter: counterProviderList[0],
-    description: "Explore the vibrant culture and rich history of Chennai. "
-        "Visit historic temples, bustling markets, and enjoy the local cuisine. "
-        "Chennai offers a unique blend of tradition and modernity.",
+    description: "Chennai, the capital city of the Indian state of Tamil Nadu, " +
+        "is known for its rich cultural heritage and vibrant traditions. " +
+        "Explore the historic temples, enjoy the delicious South Indian cuisine, " +
+        "and experience the warmth of the people.",
   ),
   TravelCard(
     cityName: "Sapporo, Japan",
@@ -51,10 +53,9 @@ List<TravelCard> travelOptionsList = [
     icon: Icons.favorite,
     iconColor: Colors.red,
     counter: counterProviderList[1],
-    description: "Experience the beauty of Sapporo in every season. "
-        "From cherry blossoms in spring to winter snow festivals, Sapporo "
-        "offers stunning landscapes and a warm welcome. Discover the local "
-        "culture and try delicious Hokkaido cuisine.",
+    description: "Sapporo, located on the northern Japanese island of Hokkaido, " +
+        "is a winter wonderland known for its snow festivals and delicious ramen. " +
+        "Enjoy skiing in the nearby mountains and immerse yourself in Japanese culture.",
   ),
   TravelCard(
     cityName: "Barcelona, Spain",
@@ -64,10 +65,10 @@ List<TravelCard> travelOptionsList = [
     icon: Icons.favorite,
     iconColor: Colors.red,
     counter: counterProviderList[2],
-    description: "Explore the vibrant and artistic city of Barcelona. "
-        "Visit iconic landmarks like Sagrada Familia and Park Güell. "
-        "Indulge in delicious tapas and immerse yourself in the lively atmosphere "
-        "of this Mediterranean gem.",
+    description: "Barcelona, the capital of Catalonia, is famous for its unique " +
+        "architecture, including the works of Antoni Gaudí. Stroll down " +
+        "the bustling La Rambla, visit the Sagrada Família, and savor " +
+        "authentic tapas in this vibrant city.",
   ),
   TravelCard(
     cityName: "Rio de Janeiro, Brazil",
@@ -77,9 +78,9 @@ List<TravelCard> travelOptionsList = [
     icon: Icons.favorite,
     iconColor: Colors.red,
     counter: counterProviderList[3],
-    description: "Experience the energetic vibes of Rio de Janeiro. "
-        "Relax on the famous Copacabana Beach, explore the iconic Christ the Redeemer, "
-        "and immerse yourself in the rhythm of samba. Rio de Janeiro is a lively "
-        "destination with breathtaking landscapes.",
+    description: "Rio de Janeiro, known for its iconic Carnival and stunning " +
+        "beaches like Copacabana and Ipanema, is a lively city nestled " +
+        "between mountains and the Atlantic Ocean. Enjoy the vibrant " +
+        "culture, music, and breathtaking views.",
   ),
 ];
