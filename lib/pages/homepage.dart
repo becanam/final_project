@@ -7,6 +7,72 @@ import 'package:midterm_project/utilities/login.dart';
 import 'package:midterm_project/utilities/tab_bar.dart';
 import 'package:midterm_project/pages/add_travel_page.dart';
 
+class ExplodingThumbsUp extends StatefulWidget {
+  @override
+  _ExplodingThumbsUpState createState() => _ExplodingThumbsUpState();
+}
+
+class _ExplodingThumbsUpState extends State<ExplodingThumbsUp>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(_controller);
+    _fadeAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(_controller);
+    _colorAnimation = ColorTween(begin: Colors.blue[300], end: Colors.green)
+        .animate(_controller);
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleOnPressed() {
+    if (_controller.status == AnimationStatus.dismissed) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      iconSize: 30,
+      icon: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _fadeAnimation.value,
+            child: Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Icon(Icons.thumb_up, color: _colorAnimation.value),
+            ),
+          );
+        },
+      ),
+      onPressed: _handleOnPressed,
+    );
+  }
+}
+
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
@@ -54,6 +120,15 @@ class _HomepageState extends ConsumerState<Homepage> {
     final double horizontalPadding = 30.0;
     final double verticalPadding = 20.0;
 
+    Future<void> _navigateToDetailPage(
+        BuildContext context, String countryName) async {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DetailPage(countryName: countryName),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -97,7 +172,7 @@ class _HomepageState extends ConsumerState<Homepage> {
                     horizontal: horizontalPadding, vertical: verticalPadding),
                 child: Container(
                   width: 250,
-                  height: 125,
+                  height: 143,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -163,78 +238,120 @@ class _HomepageState extends ConsumerState<Homepage> {
                     padding: const EdgeInsets.all(16),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 1 / 1, // Adjusted childAspectRatio
+                      childAspectRatio: 1 / 2.5, //takes care of card size
                     ),
                     itemBuilder: (context, index) {
                       var plan = snapshot.data![index];
+
                       return Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            Image.network(
-                              plan['imageUrl'] ?? 'assets/default_image.png',
-                              height: 250.0,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/default_image.png',
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () {
+                              _navigateToDetailPage(
+                                  context, plan['name'] ?? 'Unknown Name');
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Image.network(
+                                  plan['imageUrl'] ??
+                                      'assets/default_image.png',
                                   height: 250.0,
                                   fit: BoxFit.cover,
-                                );
-                              },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/default_image.png',
+                                      height: 250.0,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        plan['name'] ?? 'Unknown Name',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "국가: ${plan['country'] ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "도시: ${plan['city'] ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "시작일: ${plan['startDate'] ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "종료일: ${plan['endDate'] ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Text(
+                                        "테마: ${plan['theme'] ?? 'Unknown'}",
+                                        style: TextStyle(fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              // Confirmation dialog and deletion logic
+                                              // ... existing code for delete button
+                                            },
+                                            child: Text('Delete',
+                                                style: TextStyle(
+                                                    color: Colors.black)),
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.red),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.thumb_up),
+                                            color: const Color.fromARGB(255,
+                                                158, 158, 158), // Default color
+                                            onPressed: () {
+                                              // Trigger the exploding animation
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    child: ExplodingThumbsUp(),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 10), // Adjusted gap
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    plan['name'] ?? 'Unknown Name',
-                                    style: TextStyle(
-                                      fontSize: 24, // Increased font size
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "국가: ${plan['country'] ?? 'Unknown'}",
-                                    style: TextStyle(
-                                        fontSize: 18), // Increased font size
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "도시: ${plan['city'] ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "시작일: ${plan['startDate'] ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "종료일: ${plan['endDate'] ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "가격(usd): ${plan['price']?.toString() ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "테마: ${plan['theme'] ?? 'Unknown'}",
-                                    style: TextStyle(fontSize: 20),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                          ));
                     },
                   );
                 },
@@ -278,6 +395,100 @@ class _HomepageState extends ConsumerState<Homepage> {
         child: LoginScreen(),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      ),
+    );
+  }
+}
+
+// DetailPage 클래스 정의
+class DetailPage extends StatefulWidget {
+  final String countryName;
+
+  const DetailPage({required this.countryName});
+
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  double iconSize = 48.0;
+  bool isMaxSizeReached = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.countryName),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // "더이상 누를 수 없습니다!" 문구
+            Visibility(
+              visible: isMaxSizeReached,
+              child: SizedBox(
+                height: 30.0,
+                child: Center(
+                  child: Text(
+                    "더이상 누를 수 없습니다!",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ),
+            ),
+            // 좋아요 아이콘
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset(
+                'lib/icons/heart.png',
+                height: iconSize,
+                width: iconSize,
+              ),
+            ),
+            SizedBox(height: 16.0),
+
+            // "+" 버튼
+            ElevatedButton(
+              onPressed: () {
+                if (iconSize + 10.0 <= 530.0) {
+                  setState(() {
+                    iconSize += 10.0;
+                    isMaxSizeReached = false;
+                  });
+                } else {
+                  setState(() {
+                    isMaxSizeReached = true;
+                  });
+
+                  Future.delayed(Duration(seconds: 1), () {
+                    setState(() {
+                      isMaxSizeReached = false;
+                    });
+                  });
+                }
+              },
+              child: Text("+"),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(50, 50),
+              ),
+            ),
+            SizedBox(height: 16.0),
+
+            // "-" 버튼
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  iconSize -= 10.0;
+                });
+              },
+              child: Text("-"),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(50, 50),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
